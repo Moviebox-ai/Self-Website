@@ -37,6 +37,8 @@
         }
         html {
             scroll-behavior: smooth;
+            overflow-x: hidden;
+            max-width: 100vw;
         }
         body {
             font-family: var(--font);
@@ -178,9 +180,20 @@
             padding: 16px 0;
             transition: var(--transition);
             background: rgba(9, 4, 20, .6);
+            border-bottom: 1px solid transparent;
+            /* backdrop-filter intentionally lives on ::before, not here --
+               filter/backdrop-filter on this element would create a new
+               containing block for position:fixed descendants (.nav-links'
+               mobile menu), trapping it inside the navbar's own box instead
+               of covering the viewport. */
+        }
+        .navbar::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: -1;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
         }
         .navbar.scrolled {
             background: rgba(9, 4, 20, .92);
@@ -428,6 +441,15 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .legal-content {
+                padding: 32px 28px;
+            }
+        }
+
+        @media (max-width: 768px) {
             .nav-links {
                 position: fixed;
                 top: 0;
@@ -457,15 +479,6 @@
                 display: flex;
                 z-index: 999;
             }
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            .legal-content {
-                padding: 32px 28px;
-            }
-        }
-
-        @media (max-width: 768px) {
             .footer-grid {
                 grid-template-columns: 1fr;
                 gap: 24px;
